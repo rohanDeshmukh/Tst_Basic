@@ -13,22 +13,11 @@ class PageView: UIView {
     @IBOutlet weak var lblTitle: UILabel!
     
     @IBOutlet weak var lblDisplayText: UILabel!
-    
-    var totalCount:Int? {
-        willSet{
-            
-        }
+
+    func setDataToView(textModel:TextModel,totalCount:Int) {
+        lblTitle.text = "\(textModel.id) is out of \(totalCount)"
+        lblDisplayText.text = "\(textModel.textData)"
     }
-    var textModel:TextModel? {
-        didSet{
-            guard let textModel = textModel else {
-                return
-            }
-            lblTitle.text = "\(textModel.id) is out of \(totalCount ?? 0)"
-            lblDisplayText.text = "\(textModel.textData)"
-        }
-    }
-    
     
     
 }

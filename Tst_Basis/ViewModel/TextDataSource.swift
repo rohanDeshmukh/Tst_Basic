@@ -25,8 +25,9 @@ class TextDataSource : GenericDataSource<TextModel>, iCarouselDataSource {
         let pageView = Bundle.main.loadNibNamed("PageView", owner: self, options: nil)![0] as! PageView
         pageView.frame.size.height = 400.0
         pageView.frame.size.width = 300.0
-        pageView.textModel = self.data.value[index]
-        pageView.totalCount = self.data.value.count
+//        pageView.textModel = self.data.value[index]
+//        pageView.totalCount = self.data.value.count
+        pageView.setDataToView(textModel: self.data.value[index], totalCount:self.data.value.count)
         return pageView
     }
 }
