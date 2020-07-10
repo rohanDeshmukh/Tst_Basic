@@ -10,13 +10,40 @@ import XCTest
 @testable import Tst_Basis
 
 class Tst_BasisTests: XCTestCase {
-
+    
+    var viewModel : TextViewModel!
+    var dataSource : GenericDataSource<TextModel>!
+    fileprivate var service : MockTextDataService!
+    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        self.service = MockTextDataService()
+        self.dataSource = GenericDataSource<TextModel>()
+        self.viewModel = TextViewModel(service: service, dataSource: dataSource)
     }
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        self.viewModel = nil
+        self.dataSource = nil
+        self.service = nil
+        super.tearDown()
+    }
+    
+    func testFetchWithNoService(){
+        let expectation = XCTestExpectation(description: "No service data")
+        
+        // giving no service to a view model
+        viewModel.service = nil
+        
+        // expected to not be able to fetch currencies
+        viewModel.onErrorHandling = { error in
+            expectation.fulfill()
+        }
+        
+        viewModel.fetchDataValues()
+        wait(for: [expectation], timeout: 5.0)
     }
 
     func testExample() {
@@ -32,3 +59,17 @@ class Tst_BasisTests: XCTestCase {
     }
 
 }
+
+class MockTextDataService : DataServiceProtocol {
+    
+    var textData : TextModel?
+    
+    func fetchData(_ completion: @escaping ((Result<TextModel, ErrorResult>) -> Void)) {
+        if let textData = textData {
+            completion(Result.success(textData))
+        }else {
+            completion(Result.failure(ErrorResult.custom(string:"No text data")))
+        }
+    }
+}
+
